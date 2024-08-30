@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "react-spring";
 import Navbar from "../styles/Navbar";
 import CourseCard from "./CourseCard";
 import Footer from "../LandingPage/Footer";
+import axios from "axios";
 
 const CoursesPage = () => {
   const [activeTab, setActiveTab] = useState("courses");
+  const [fetchedCourses, setFetchedCourses] = useState([]);
+  const [fetchedSimulators, setFetchedSimulators] = useState([]);
+  const [courseImages, setCourseImages] = useState([]);
+  const [simulatorImages, setSimulatorImages] = useState([]);
 
   // Typing animation for the heading
   const headingProps = useSpring({
-    from: { width: "0%"},
+    from: { width: "0%" },
     to: { width: "100%" },
     config: { duration: 4000 },
     reset: true,
@@ -18,19 +23,36 @@ const CoursesPage = () => {
   // Typing animation for the paragraph
   const paragraphProps = useSpring({
     from: { width: "0%" },
-    to: { width: "100%",  },
+    to: { width: "100%" },
     config: { duration: 5000 },
     reset: true,
   });
 
-  // Sample data
-  const courses = [
-    { title: "PMP Certification", InstructorName: "John Doe", duration: "40 hours", type: "course", img: `${process.env.PUBLIC_URL}/images/Course-img-1.png` },
-    { title: "PMI-ACP Exam Prep", InstructorName: "Jane Smith", duration: "30 hours", type: "course", img: `${process.env.PUBLIC_URL}/images/Course-img-2.png` },
-    { title: "CAPM Training", InstructorName: "Alice Johnson", duration: "25 hours", type: "course", img: `${process.env.PUBLIC_URL}/images/Course-img-3.png` },
-    { title: "Advanced Project Management", InstructorName: "Bob Brown", duration: "35 hours", type: "course", img: `${process.env.PUBLIC_URL}/images/Course-img-4.png` },
-    { title: "Project Management Simulator", InstructorName: "Simulator Team", duration: "N/A", type: "simulator", img: `${process.env.PUBLIC_URL}/images/Course-img-1.png` },
-  ];
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/courses/getAllCourses");
+        setFetchedCourses(response.data.courses);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    const fetchSimulators = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/courses/getAllSimulators");
+        setFetchedSimulators(response.data);
+      } catch (error) {
+        console.error("Error fetching simulators:", error);
+      }
+    };
+
+    fetchCourses();
+    fetchSimulators();
+  }, []);
+
+  // Choose the appropriate images and content based on the active tab
+  const contentToDisplay = activeTab === "courses" ? fetchedCourses : fetchedSimulators;
 
   return (
     <div>
@@ -78,7 +100,9 @@ const CoursesPage = () => {
         <div
           onClick={() => setActiveTab("simulators")}
           className={`cursor-pointer px-4 py-2 rounded-lg ${
-            activeTab === "simulators" ? "bg-blue-500 text-white" : "bg-gray-200"
+            activeTab === "simulators"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200"
           } transition-colors duration-300`}
         >
           Simulators
@@ -87,13 +111,17 @@ const CoursesPage = () => {
 
       {/* Filtered content */}
       <div className="p-4 px-4 sm:px-8 flex flex-wrap gap-6 justify-center mb-12">
-        {courses
-          .filter(course => activeTab === "courses" ? course.type === "course" : course.type === "simulator")
-          .map((course, index) => (
-            <div key={index} className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-[23%]">
-              <CourseCard course={course} />
-            </div>
-          ))}
+        {contentToDisplay.map((item, index) => (
+          <div
+            key={index}
+            className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-[23%]"
+          >
+            <CourseCard
+              course={item}
+              type={activeTab} // Pass the type to CourseCard
+            />
+          </div>
+        ))}
       </div>
 
       <Footer />

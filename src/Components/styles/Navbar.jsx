@@ -3,18 +3,56 @@ import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useCookies } from "react-cookie";
+import Cart from "./Cart"; // Import the Cart component
+import axios from "axios";
 
 const Navbar = ({ textColor = "text-white" }) => {
+  const [cookies, setCookie] = useCookies(["jwt", "PMI-cart"]);
   const [isAuthenticated, setIsAuthenticated] = useState(null); // Start with null to indicate loading state
   const [isOpen, setIsOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false); // State to manage cart visibility
+
+  const cartItemsCount = (cookies["PMI-cart"] || []).length; // Calculate number of items in the cart
+
+  // useEffect(() => {
+  //   if (cookies.jwt) {
+  //     setIsAuthenticated(true);
+  //   } else {
+  //     setIsAuthenticated(false);
+  //   }
+  // }, [cookies.jwt]);
 
   useEffect(() => {
-    const authStatus = localStorage.getItem("isAuthenticated") === "true";
-    setIsAuthenticated(authStatus);
+    axios
+      .get("http://localhost:5000/auth/verifyAuth", { withCredentials: true })
+      .then((response) => {
+        setIsAuthenticated(true);
+        console.log(response);
+      })
+      .catch((error) => {
+        setIsAuthenticated(false);
+        console.log(error);
+      });
   }, []);
+
+  let userType;
+  if (cookies.userType){
+    if(cookies.userType=='student'){
+      userType="student"
+    }
+    else{
+      userType='instructor'
+    }
+  }
+ 
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
   };
 
   const loginBgColor =
@@ -39,13 +77,13 @@ const Navbar = ({ textColor = "text-white" }) => {
           <Link to="/courses" className="hover:text-blue-200">
             Courses
           </Link>
-          <Link to="/simulator" className="hover:text-blue-200">
+          <Link to="/courses" className="hover:text-blue-200">
             Simulator
           </Link>
-          <Link to="/pmi" className="hover:text-blue-200">
+          <Link to="/" className="hover:text-blue-200">
             PMI
           </Link>
-          <Link to="/about" className="hover:text-blue-200">
+          <Link to="/" className="hover:text-blue-200">
             About Us
           </Link>
         </div>
@@ -53,7 +91,7 @@ const Navbar = ({ textColor = "text-white" }) => {
         {/* Conditional buttons */}
         <div className="hidden md:flex items-center space-x-4">
           {isAuthenticated === null ? null : isAuthenticated ? (
-            <Link to="/dashboard">
+            <Link to={`/${userType}/dashboard`}>
               <div
                 className={`w-24 ${textColor} rounded-full px-2 py-1.5 hover:underline hover:scale-105 cursor-pointer text-center`}
               >
@@ -76,7 +114,16 @@ const Navbar = ({ textColor = "text-white" }) => {
               </Link>
             </>
           )}
-          <ShoppingCartIcon className={textColor} />
+          <div className="relative">
+            <button onClick={toggleCart} className="focus:outline-none">
+              <ShoppingCartIcon className={textColor} />
+              {cartItemsCount > 0 && (
+                <span className="absolute left-4 bottom-5 h-5 w-5 bg-blue-800 text-white rounded-full flex items-center justify-center text-xs">
+                  {cartItemsCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Hamburger menu and Cart icon for small screens */}
@@ -88,7 +135,16 @@ const Navbar = ({ textColor = "text-white" }) => {
               <MenuIcon className={textColor} />
             )}
           </button>
-          <ShoppingCartIcon className={textColor} />
+          <div className="relative">
+            <button onClick={toggleCart} className="focus:outline-none">
+              <ShoppingCartIcon className={textColor} />
+              {cartItemsCount > 0 && (
+                <span className="absolute top-0 right-0 h-5 w-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs">
+                  {cartItemsCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -134,6 +190,9 @@ const Navbar = ({ textColor = "text-white" }) => {
           )}
         </div>
       )}
+
+      {/* Cart Component */}
+      {isCartOpen && <Cart cookies={cookies} setCookie={setCookie} />}
     </div>
   );
 };

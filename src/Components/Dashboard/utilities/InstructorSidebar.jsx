@@ -11,10 +11,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import axios from "axios";
 
-function Sidebar({ isOpen, onClose }) {
-
-  const navigate=useNavigate();
-
+function InstructorSidebar({ isOpen, onClose }) {
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -26,18 +24,16 @@ function Sidebar({ isOpen, onClose }) {
     return location.pathname === pathname;
   };
 
-  const handleLogout = async() => {
-    console.log('logout')
-    // localStorage.setItem('isAuthenticated', 'false');
-
-    const response = await axios.get("http://localhost:5000/auth/logout",{
+  const handleLogout = async () => {
+    console.log("logout");
+    const response = await axios.get("http://localhost:5000/auth/logout", {
       withCredentials: true,
-    } );
-  if(response){
-    console.log('ok')
-    navigate('/login');
-  }
-}
+    });
+    if (response) {
+      console.log("ok");
+      navigate("/login");
+    }
+  };
 
   return (
     <div>
@@ -65,24 +61,44 @@ function Sidebar({ isOpen, onClose }) {
             className="w-12 h-12 rounded-full mb-1"
           />
           <div className="text-center">
-            <p className="text-gray-300 text-sm">Student</p>
+            <p className="text-gray-300 text-sm">Instructor</p>
           </div>
         </div>
 
         <div className="flex flex-col gap-4 w-full">
           <SidebarItem
-            to="/student/dashboard"
+            to="/instructor/dashboard"
             label="Dashboard"
-            isActive={isActive("/dashboard")}
+            isActive={isActive("/instructor/dashboard")}
             onClose={onClose}
             icon={
               <DashboardRoundedIcon style={{ color: "white", fontSize: 20 }} />
             }
           />
           <SidebarItem
-            to="/student/dashboard/courses"
-            label="Courses"
-            isActive={isActive("/dashboard/courses")}
+            to="/instructor/dashboard/students"
+            label="Students"
+            isActive={isActive("/instructor/dashboard/students")}
+            onClose={onClose}
+            icon={
+              <GroupsRoundedIcon style={{ color: "white", fontSize: 20 }} />
+            }
+          />
+          <SidebarItem
+            to="/instructor/dashboard/availability"
+            label="Availability"
+            isActive={isActive("/instructor/dashboard/availability")}
+            onClose={onClose}
+            icon={
+              <PermContactCalendarRoundedIcon
+                style={{ color: "white", fontSize: 20 }}
+              />
+            }
+          />
+          <SidebarItem
+            to="/instructor/dashboard/sessions"
+            label="Sessions"
+            isActive={isActive("/instructor/dashboard/sessions")}
             onClose={onClose}
             icon={
               <AccountBalanceRoundedIcon
@@ -91,30 +107,9 @@ function Sidebar({ isOpen, onClose }) {
             }
           />
           <SidebarItem
-            to="/student/dashboard/simulators"
-            label="Simulators"
-            isActive={isActive("/dashboard/simulators")}
-            onClose={onClose}
-            icon={
-              <GroupsRoundedIcon style={{ color: "white", fontSize: 20 }} />
-            }
-          />
-          <SidebarItem
-            to="/student/dashboard/payments-and-billing"
-            label="Payments & Billing"
-            isActive={isActive("/dashboard/payments-and-billing")}
-            onClose={onClose}
-            icon={
-              <PermContactCalendarRoundedIcon
-                style={{ color: "white", fontSize: 20 }}
-              />
-            }
-          />
-
-          <SidebarItem
-            to="/student/dashboard/profile"
+            to="/instructor/dashboard/profile"
             label="Profile"
-            isActive={isActive("/dashboard/profile")}
+            isActive={isActive("/instructor/dashboard/profile")}
             onClose={onClose}
             icon={
               <Person2RoundedIcon style={{ color: "white", fontSize: 20 }} />
@@ -163,4 +158,4 @@ function SidebarItem({ to, icon, label, isActive, onClose, onClick }) {
   );
 }
 
-export default Sidebar;
+export default InstructorSidebar;

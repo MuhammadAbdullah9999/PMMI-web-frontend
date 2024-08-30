@@ -1,8 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../../styles/Navbar";
 import Footer from "../../LandingPage/Footer";
+import Cookies from "js-cookie";
+import { useCookies } from "react-cookie";
 
-const CourseDetail = () => {
+const CourseDetailPage = () => {
+  const { type, courseName } = useParams(); // Extract type and name from URL
+  console.log(type, courseName);
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [cookies, setCookie] = useCookies(["PMI-cart"]);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/courses/getCourseDetails`, // Update with the correct endpoint
+          {
+            params: { type, courseName },
+          }
+        );
+        // console.log(response.data)
+        setCourse(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching course details:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchCourse();
+  }, [type, courseName]);
+  const handleAddToCart = async () => {
+    if (course) {
+      const existingCart = cookies['PMI-cart'] ? cookies['PMI-cart'] : [];
+
+      // Check if the existingCart is an array, if not, initialize it as an array
+      const updatedCart = Array.isArray(existingCart) ? [...existingCart, course] : [course];
+
+      // Update the cookie with the new cart value
+      setCookie('PMI-cart', JSON.stringify(updatedCart), { path: '/' });
+
+      alert("Item added to cart");
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!course) {
+    return <div>Course not found</div>;
+  }
   return (
     <div>
       <Navbar textColor="text-blue-800" />
@@ -17,7 +68,8 @@ const CourseDetail = () => {
           {/* Text Content */}
           <div className="flex flex-col w-full lg:w-1/2 z-10 text-center lg:text-left">
             <h1 className="text-lg lg:text-xl font-bold mb-2 mt-8 sm:mt-0">
-              PMP Exam Prep Online Training Course<br /> “1-1 sessions”
+              PMP Exam Prep Online Training Course
+              <br /> “1-1 sessions”
             </h1>
             <p className="mb-2 text-gray-200 text-xs lg:text-sm">
               Get your PMI PMP certification now
@@ -31,9 +83,12 @@ const CourseDetail = () => {
               <span className="font-bold">Price:</span> $1000
             </p>
             <div className="sm:text-center md:text-start">
-            <button className="w-2/3 lg:w-1/5 bg-blue-100 text-gray-900 text-md font-semibold py-2 px-2 mt-6 rounded-lg hover:bg-gray-100 active:bg-blue-200">
-              Add to Cart
-            </button>
+              <button
+                className="w-2/3 lg:w-1/5 bg-blue-100 text-gray-900 text-md font-semibold py-2 px-2 mt-6 rounded-lg hover:bg-gray-100 active:bg-blue-200"
+                onClick={handleAddToCart}
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
 
@@ -136,10 +191,10 @@ const CourseDetail = () => {
           PMI’s Project Management Professional (PMP)® credential is the most
           important industry-recognized certification for project managers.
           Globally recognized and demanded, the PMP® demonstrates that you have
-          the experience, education, and competency to lead and direct
-          projects. If you’re an experienced project manager looking to
-          solidify your skills, stand out to employers, and maximize your
-          earning potential, the PMP credential is the right choice for you.
+          the experience, education, and competency to lead and direct projects.
+          If you’re an experienced project manager looking to solidify your
+          skills, stand out to employers, and maximize your earning potential,
+          the PMP credential is the right choice for you.
         </p>
         <h1 className="font-bold text-xl lg:text-2xl text-blue-800">
           PMP Requirements
@@ -163,9 +218,11 @@ const CourseDetail = () => {
         <p className="self-start text-justify">
           The PMP EXAM is an online test conducted at designated Test Centers.
           <br />
-          Duration of Exam: 4 Hours<br />
+          Duration of Exam: 4 Hours
+          <br />
           Number of Questions: 200 (Multiple Choice 4 options). Out of this, 25
-          questions are randomly placed pretest/dummy questions.<br />
+          questions are randomly placed pretest/dummy questions.
+          <br />
           Instant Results after 4 Hours – Breakup of percentage marks obtained
           for each topic is given with overall Pass/Fail
         </p>
@@ -206,4 +263,4 @@ const CourseDetail = () => {
   );
 };
 
-export default CourseDetail;
+export default CourseDetailPage;

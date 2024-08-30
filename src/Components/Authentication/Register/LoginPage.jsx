@@ -5,10 +5,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
+  const[cookies]=useCookies(['userType']);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -57,8 +59,11 @@ const LoginPage = () => {
       }
     );
       console.log("Login successful:", response.data);
-      localStorage.setItem('isAuthenticated', 'true');
-      navigate('/dashboard');
+      if(response.data.userType==='instructor'){
+        navigate('/instructor/dashboard');
+      }else if(response.data.userType==='student'){
+        navigate('/student/dashboard');
+      }
     } catch (error) {
       if (error.response && error.response.data) {
         setApiError(error.response.data.message || "An error occurred");
