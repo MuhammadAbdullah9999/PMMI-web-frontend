@@ -40,7 +40,7 @@ console.log(cartItems)
   const handleCheckout = async () => {
     setLoading(true); // Start loading
     try {
-      const response = await fetch(`${process.env.ServerURL}/payment/checkout`, {
+      const response = await fetch(`https://pmi-web-backend.onrender.com/payment/checkout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +95,7 @@ console.log(cartItems)
                     try {
                       setLoading(true); // Start loading
                       const response = await fetch(
-                        `${process.env.ServerURL}/payment/api/orders`,
+                        `https://pmi-web-backend.onrender.com/payment/api/orders`,
                         {
                           method: "POST",
                           headers: {
@@ -137,7 +137,7 @@ console.log(cartItems)
   try {
     // Capture the order
     const response = await fetch(
-      `${process.env.ServerURL}/payment/api/orders/${data.orderID}/capture`,
+      `https://pmi-web-backend.onrender.com/payment/api/orders/${data.orderID}/capture`,
       {
         method: "POST",
         headers: {
@@ -181,7 +181,7 @@ console.log(cartItems)
         paymentType: paymentType, // Include payment type
       };
       console.log("Payment Data", paymentData);
-      const response=  await axios.post(`${process.env.ServerURL}/payment/setPaymentDetails`,paymentData);
+      const response=  await axios.post(`https://pmi-web-backend.onrender.com/payment/setPaymentDetails`,paymentData);
       console.log(response);
 
       // setMessage(

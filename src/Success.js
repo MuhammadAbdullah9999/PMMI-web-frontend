@@ -18,12 +18,12 @@ const Success = () => {
       if (sessionId) {
         try {
           // Fetch the result from the backend
-          const response = await fetch(`http://localhost:5000/payment/complete?session_id=${sessionId}`);
+          const response = await fetch(`https://pmi-web-backend.onrender.com/payment/complete?session_id=${sessionId}`);
           const result = await response.json();
           console.log(result);
 
           if (response.ok) {
-            const response = await axios.post('http://localhost:5000/payment/setPaymentDetails', result);
+            const response = await axios.post('https://pmi-web-backend.onrender.com/payment/setPaymentDetails', result);
             console.log(response);
 
             // Set payment details for display

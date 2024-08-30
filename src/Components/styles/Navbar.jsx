@@ -15,14 +15,6 @@ const Navbar = ({ textColor = "text-white" }) => {
 
   const cartItemsCount = (cookies["PMI-cart"] || []).length; // Calculate number of items in the cart
 
-  // useEffect(() => {
-  //   if (cookies.jwt) {
-  //     setIsAuthenticated(true);
-  //   } else {
-  //     setIsAuthenticated(false);
-  //   }
-  // }, [cookies.jwt]);
-
   useEffect(() => {
     axios
       .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
@@ -53,6 +45,10 @@ const Navbar = ({ textColor = "text-white" }) => {
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
+  };
+
+  const closeCart = () => {
+    setIsCartOpen(false);
   };
 
   const loginBgColor =
@@ -162,37 +158,47 @@ const Navbar = ({ textColor = "text-white" }) => {
           <Link to="/simulator" className="block py-2 hover:text-blue-200">
             Simulator
           </Link>
-          <Link to="/pmi" className="block py-2 hover:text-blue-200">
+          <Link to="/" className="block py-2 hover:text-blue-200">
             PMI
           </Link>
-          <Link to="/about" className="block py-2 hover:text-blue-200">
+          <Link to="/" className="block py-2 hover:text-blue-200">
             About Us
           </Link>
-          {isAuthenticated === null ? null : isAuthenticated ? (
-            <Link to="/dashboard">
-              <button className="block w-full text-left bg-white text-blue-500 px-4 py-2 rounded-full mt-2 hover:bg-blue-100">
-                Dashboard
-              </button>
-            </Link>
-          ) : (
-            <>
-              <Link to="/register">
-                <button className="block w-full text-left bg-white text-blue-500 px-4 py-2 rounded-full mt-2 hover:bg-blue-100">
-                  Sign Up
-                </button>
+          <div className="flex space-x-4 mt-4">
+            {isAuthenticated === null ? null : isAuthenticated ? (
+              <Link to={`/${userType}/dashboard`}>
+                <div
+                  className={`w-24 ${textColor} rounded-full px-2 py-1.5 hover:underline hover:scale-105 cursor-pointer text-center`}
+                >
+                  Dashboard
+                </div>
               </Link>
-              <Link to="/login">
-                <button className="block w-full text-left bg-white text-blue-500 px-4 py-2 rounded-full mt-2 hover:bg-blue-100">
-                  Login
-                </button>
-              </Link>
-            </>
-          )}
+            ) : (
+              <>
+                <Link to="/login">
+                  <div
+                    className={`w-24 ${loginBgColor} ${loginTextColor} rounded-full px-2 py-1.5 ${loginHoverColor} cursor-pointer text-center`}
+                  >
+                    Login
+                  </div>
+                </Link>
+                <Link to="/register">
+                  <div className="w-24 bg-blue-800 text-white rounded-full px-2 py-1.5 hover:bg-blue-500 cursor-pointer text-center">
+                    Sign Up
+                  </div>
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Cart Component */}
-      {isCartOpen && <Cart cookies={cookies} setCookie={setCookie} />}
+      {/* Cart component */}
+      {isCartOpen && (
+        <div>
+          <Cart cookies={cookies} setCookie={setCookie} closeCart={closeCart} />
+        </div>
+      )}
     </div>
   );
 };
