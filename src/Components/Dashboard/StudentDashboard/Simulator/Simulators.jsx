@@ -9,7 +9,7 @@ const Simulators = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/student/dashboard/simulators/`, { withCredentials: true })
+      .get(`${process.env.ServerURL}/student/dashboard/simulators/`, { withCredentials: true })
       .then((response) => {
         console.log(response);
         setSimulators(Array.isArray(response.data.simulators)

@@ -17,7 +17,7 @@ const params=useParams();
 const courseId=params.courseId
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/verifyAuth", { withCredentials: true })
+      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         if(response.data.user.userType==='student'){
           setIsAuthenticated(true);
@@ -32,7 +32,7 @@ const courseId=params.courseId
       });
   }, []);
   const getCourseData = async () => {
-    const response = await axios.get('http://localhost:5000/student/dashboard/course/courseDetail', {
+    const response = await axios.get(`${process.env.ServerURL}/student/dashboard/course/courseDetail`, {
       params: {
       courseId:courseId
       },
@@ -45,7 +45,7 @@ const courseId=params.courseId
   useEffect(() => {
     const fetchAvailabilityData = async() => {
       axios
-        .get("http://localhost:5000/student/dashboard/getInstructorAvailability", { withCredentials: true })
+        .get(`${process.env.ServerURL}/student/dashboard/getInstructorAvailability`, { withCredentials: true })
         .then((response) => {
           setAvailabilityData(response.data.availability || []);
           
@@ -116,7 +116,7 @@ const courseId=params.courseId
   
       axios
         .post(
-          "http://localhost:5000/student/dashboard/bookSlot",
+          `${process.env.ServerURL}/student/dashboard/bookSlot`,
           {
             day: selectedDay,
             time: selectedTime,

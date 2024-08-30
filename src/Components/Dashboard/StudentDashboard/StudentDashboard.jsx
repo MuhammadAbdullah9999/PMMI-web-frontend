@@ -11,7 +11,7 @@ function StudentDashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/verifyAuth", { withCredentials: true })
+      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         if (response.data.user.userType == "student") {
           setIsAuthenticated(true);
@@ -28,7 +28,7 @@ function StudentDashboard() {
 
   const fetchDashboardData = () => {
     axios
-      .get("http://localhost:5000/student/dashboard", { withCredentials: true })
+      .get(`${process.env.ServerURL}/student/dashboard`, { withCredentials: true })
       .then((response) => {
         console.log(response);
         setDashboardData(response.data);

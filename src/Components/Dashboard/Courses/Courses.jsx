@@ -11,7 +11,7 @@ const Courses = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/verifyAuth", { withCredentials: true })
+      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         console.log(response);
         if (response.data.user.userType === "student") {
@@ -28,7 +28,7 @@ const Courses = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/student/dashboard/courses/`, {
+      .get(`${process.env.ServerURL}/student/dashboard/courses/`, {
         withCredentials: true,
       })
       .then((response) => {

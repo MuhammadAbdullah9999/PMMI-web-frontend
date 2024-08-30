@@ -30,7 +30,7 @@ function Sidebar({ isOpen, onClose }) {
     console.log('logout')
     // localStorage.setItem('isAuthenticated', 'false');
 
-    const response = await axios.get("http://localhost:5000/auth/logout",{
+    const response = await axios.get(`${process.env.ServerURL}/auth/logout`,{
       withCredentials: true,
     } );
   if(response){

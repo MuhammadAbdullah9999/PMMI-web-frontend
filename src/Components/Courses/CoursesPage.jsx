@@ -31,7 +31,7 @@ const CoursesPage = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/courses/getAllCourses");
+        const response = await axios.get(`${process.env.ServerURL}/courses/getAllCourses`);
         setFetchedCourses(response.data.courses);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -40,7 +40,7 @@ const CoursesPage = () => {
 
     const fetchSimulators = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/courses/getAllSimulators");
+        const response = await axios.get(`${process.env.ServerURL}/courses/getAllSimulators`);
         setFetchedSimulators(response.data);
       } catch (error) {
         console.error("Error fetching simulators:", error);

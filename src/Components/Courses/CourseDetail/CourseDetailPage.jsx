@@ -17,7 +17,7 @@ const CourseDetailPage = () => {
     const fetchCourse = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/courses/getCourseDetails`, // Update with the correct endpoint
+          `${process.env.ServerURL}/courses/getCourseDetails`, // Update with the correct endpoint
           {
             params: { type, courseName },
           }

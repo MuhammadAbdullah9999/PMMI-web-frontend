@@ -9,7 +9,7 @@ const PaymentsAndBilling = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/verifyAuth", { withCredentials: true })
+      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         if (response.data.user.userType === "student") {
           setIsAuthenticated(true);
@@ -26,7 +26,7 @@ const PaymentsAndBilling = () => {
   useEffect(() => {
     if (isAuthenticated) { // Fetch payments only if authenticated
       axios
-        .get(`http://localhost:5000/student/dashboard/payments/`, {
+        .get(`${process.env.ServerURL}/student/dashboard/payments/`, {
           withCredentials: true,
         })
         .then((response) => {

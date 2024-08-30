@@ -20,7 +20,7 @@ const SimulatorModule = () => {
     if (simulatorTitle && moduleTitle) {
       axios
         .get(
-          `http://localhost:5000/student/dashboard/simulators/${simulatorTitle}/${moduleTitle}`,
+          `${process.env.ServerURL}/student/dashboard/simulators/${simulatorTitle}/${moduleTitle}`,
           { withCredentials: true }
         )
         .then((response) => {
@@ -93,7 +93,7 @@ const SimulatorModule = () => {
         .correctOption;
     axios
       .post(
-        `http://localhost:5000/student/dashboard/simulator/updateQuestion`,
+        `${process.env.ServerURL}/student/dashboard/simulator/updateQuestion`,
         {
           simulatorTitle,
           moduleTitle,

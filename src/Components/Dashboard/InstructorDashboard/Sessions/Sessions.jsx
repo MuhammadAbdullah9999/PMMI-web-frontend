@@ -19,7 +19,7 @@ function Sessions() {
   const fetchMeetingsData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/instructor/dashboard/getMeetingDetails",
+        `${process.env.ServerURL}/instructor/dashboard/getMeetingDetails`,
         { withCredentials: true }
       );
       console.log(response.data);
@@ -61,7 +61,7 @@ function Sessions() {
 
       try {
         const response = await axios.post(
-          "http://localhost:5000/instructor/dashboard/addMeetingLink",
+          `${process.env.ServerURL}/instructor/dashboard/addMeetingLink`,
           {
             slotId: editLinkId,
             newLink: inputLink,
@@ -103,7 +103,7 @@ function Sessions() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/verifyAuth", { withCredentials: true })
+      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         if (response.data.user.userType === "instructor") {
           setIsAuthenticated(true);

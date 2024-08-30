@@ -14,28 +14,35 @@ function Availability() {
 
   // Days of the week
   const daysOfWeek = [
-    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
   ];
   function convertLocalToUTC(localTime) {
     // Example: localTime is '12:00'
-    const [hours, minutes] = localTime.split(':').map(Number);
-  
+    const [hours, minutes] = localTime.split(":").map(Number);
+
     // Create a new Date object for today with the local time
     const localDate = new Date();
     localDate.setHours(hours, minutes, 0, 0);
-  
+
     // Get the UTC equivalent
     const utcDate = new Date(localDate.toUTCString());
-  
+
     return utcDate.toISOString(); // This is the UTC time in ISO format
   }
-  
-  // Example usage
 
+  // Example usage
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/verifyAuth", { withCredentials: true })
+      .get(`${process.env.ServerURL}/auth/verifyAuth`, {
+        withCredentials: true,
+      })
       .then((response) => {
         console.log(response);
         if (response.data.user.userType === "instructor") {
@@ -52,7 +59,9 @@ function Availability() {
 
   const fetchAvailabilityData = () => {
     axios
-      .get("http://localhost:5000/instructor/dashboard/getAvailability", { withCredentials: true })
+      .get(`${process.env.ServerURL}/instructor/dashboard/getAvailability`, {
+        withCredentials: true,
+      })
       .then((response) => {
         console.log(response);
         setAvailabilityData(response.data.availability || []);
@@ -61,46 +70,54 @@ function Availability() {
         console.error("Error fetching dashboard data:", error);
       });
   };
-  useEffect(()=>{
+  useEffect(() => {
     fetchAvailabilityData();
-  },[])
+  }, []);
 
   const handleAddAvailability = () => {
     if (selectedDays.length === 0 || !startTime || !endTime) {
-      setError("Please select at least one day and provide both start and end times.");
+      setError(
+        "Please select at least one day and provide both start and end times."
+      );
       return;
     }
     if (startTime >= endTime) {
       setError("End time should be greater than start time.");
       return;
     }
-  
+
     // Convert startTime and endTime to UTC for comparison
     const utcStartTime = convertLocalToUTC(startTime);
     const utcEndTime = convertLocalToUTC(endTime);
-  
+
     // Check if availability already exists for the selected days
-    const isDuplicate = availabilityData.some(daySlot =>
-      selectedDays.includes(daySlot.day) &&
-      daySlot.times.some(slot => 
-        new Date(slot.start).toISOString() === utcStartTime &&
-        new Date(slot.end).toISOString() === utcEndTime
-      )
+    const isDuplicate = availabilityData.some(
+      (daySlot) =>
+        selectedDays.includes(daySlot.day) &&
+        daySlot.times.some(
+          (slot) =>
+            new Date(slot.start).toISOString() === utcStartTime &&
+            new Date(slot.end).toISOString() === utcEndTime
+        )
     );
-  
+
     if (isDuplicate) {
       setError("Availability already set for this day and time.");
       return;
     }
-  
+
     const newAvailability = {
       days: selectedDays,
       startTime: utcStartTime,
-      endTime: utcEndTime
+      endTime: utcEndTime,
     };
-  console.log(newAvailability);
+    console.log(newAvailability);
     axios
-      .post("http://localhost:5000/instructor/dashboard/setAvailability", newAvailability, { withCredentials: true })
+      .post(
+        `${process.env.ServerURL}/instructor/dashboard/setAvailability`,
+        newAvailability,
+        { withCredentials: true }
+      )
       .then((response) => {
         console.log("Availability set successfully:", response.data);
         fetchAvailabilityData();
@@ -113,11 +130,12 @@ function Availability() {
         console.error("Error setting availability:", error);
       });
   };
-  
-  
+
   const handleDayChange = (day) => {
-    setSelectedDays(prevDays =>
-      prevDays.includes(day) ? prevDays.filter(d => d !== day) : [...prevDays, day]
+    setSelectedDays((prevDays) =>
+      prevDays.includes(day)
+        ? prevDays.filter((d) => d !== day)
+        : [...prevDays, day]
     );
   };
 
@@ -130,9 +148,12 @@ function Availability() {
       setError("Cannot delete a slot that is already booked by a student.");
       return;
     }
-  
+
     axios
-      .delete(`http://localhost:5000/instructor/dashboard/deleteAvailability/${slotId}`, { withCredentials: true })
+      .delete(
+        `${process.env.ServerURL}/instructor/dashboard/deleteAvailability/${slotId}`,
+        { withCredentials: true }
+      )
       .then((response) => {
         console.log("Availability deleted successfully:", response.data);
         fetchAvailabilityData();
@@ -141,12 +162,17 @@ function Availability() {
         console.error("Error deleting availability:", error);
       });
   };
-  
 
-  const dropdownOptions = availabilityData.flatMap(daySlot =>
-    daySlot.times.map(slot => ({
-      label: `${daySlot.day}: ${new Date(slot.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${new Date(slot.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
-      value: slot._id
+  const dropdownOptions = availabilityData.flatMap((daySlot) =>
+    daySlot.times.map((slot) => ({
+      label: `${daySlot.day}: ${new Date(slot.start).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })} - ${new Date(slot.end).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`,
+      value: slot._id,
     }))
   );
 
@@ -159,7 +185,9 @@ function Availability() {
         <div className="p-6 mt-4">
           <PageNameAndDate pageName="Availability" />
           <div>
-            <h1 className="text-md font-bold mb-2 text-center">Set Availability</h1>
+            <h1 className="text-md font-bold mb-2 text-center">
+              Set Availability
+            </h1>
             <div className="flex flex-col text-sm gap-4 rounded-xl border shadow-xl p-4 h-[440px] overflow-auto">
               {/* Display Error Message */}
               {error && (
@@ -169,7 +197,6 @@ function Availability() {
               )}
 
               {/* Display Current Availability */}
-            
 
               {/* Form to Add New Availability */}
               <div className="flex flex-col gap-4 mt-4">
@@ -211,9 +238,10 @@ function Availability() {
                   Set Availability
                 </button>
 
-
                 <div className="flex flex-col gap-2">
-                <h2 className="text-md font-semibold text-center">Current Availability</h2>
+                  <h2 className="text-md font-semibold text-center">
+                    Current Availability
+                  </h2>
                   {/* <div className="mb-4">
                     <label htmlFor="availability-dropdown" className="block mb-2 font-semibold">Select Time Slot:</label>
                     <select
@@ -235,44 +263,65 @@ function Availability() {
                     </select>
                   </div> */}
 
-                {/* Display Availability in Detail */}
-                {availabilityData.length > 0 ? (
-                  availabilityData.map((daySlot, index) => (
-                    <div key={index} className="flex flex-col gap-2 mb-4">
-                      <h3 className="font-semibold">{daySlot.day}</h3>
-                      {daySlot.times.length > 0 ? (
-                        daySlot.times.map((slot, i) => (
-                          <div key={i} className="flex justify-between items-center p-2 border-b">
-                            <span>{new Date(slot.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(slot.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                            {slot.bookedBy.studentId ? (
-                              <span>Booked by: {slot.bookedBy.studentEmail}</span>
-                            ) : (
-                              <span>Available</span>
-                            )}
-                            <button
-  onClick={() => handleDeleteAvailability(slot._id, slot.bookedBy)}
-  className={`ml-4 px-2 py-1 ${slot.bookedBy.studentId ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600'} text-white rounded`}
-  disabled={!!slot.bookedBy.studentId}
->
-  Delete
-</button>
-
-                          </div>
-                        ))
-                      ) : (
-                        <p>No slots available for this day.</p>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <p>No availability set.</p>
-                )}
-              </div>
+                  {/* Display Availability in Detail */}
+                  {availabilityData.length > 0 ? (
+                    availabilityData.map((daySlot, index) => (
+                      <div key={index} className="flex flex-col gap-2 mb-4">
+                        <h3 className="font-semibold">{daySlot.day}</h3>
+                        {daySlot.times.length > 0 ? (
+                          daySlot.times.map((slot, i) => (
+                            <div
+                              key={i}
+                              className="flex justify-between items-center p-2 border-b"
+                            >
+                              <span>
+                                {new Date(slot.start).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}{" "}
+                                -{" "}
+                                {new Date(slot.end).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
+                              </span>
+                              {slot.bookedBy.studentId ? (
+                                <span>
+                                  Booked by: {slot.bookedBy.studentEmail}
+                                </span>
+                              ) : (
+                                <span>Available</span>
+                              )}
+                              <button
+                                onClick={() =>
+                                  handleDeleteAvailability(
+                                    slot._id,
+                                    slot.bookedBy
+                                  )
+                                }
+                                className={`ml-4 px-2 py-1 ${
+                                  slot.bookedBy.studentId
+                                    ? "bg-gray-400 cursor-not-allowed"
+                                    : "bg-red-600"
+                                } text-white rounded`}
+                                disabled={!!slot.bookedBy.studentId}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          ))
+                        ) : (
+                          <p>No slots available for this day.</p>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p>No availability set.</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-
-          
         </div>
       </div>
     </div>

@@ -54,7 +54,7 @@ const LoginPage = () => {
     setApiError("");
 
     try {
-      const response = await axios.post(`http://localhost:5000/auth/signIn`, formData, {
+      const response = await axios.post(`${process.env.ServerURL}/auth/signIn`, formData, {
         withCredentials: true,
       }
     );

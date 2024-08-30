@@ -25,7 +25,7 @@ const Navbar = ({ textColor = "text-white" }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/verifyAuth", { withCredentials: true })
+      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         setIsAuthenticated(true);
         console.log(response);

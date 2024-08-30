@@ -26,7 +26,7 @@ function InstructorSidebar({ isOpen, onClose }) {
 
   const handleLogout = async () => {
     console.log("logout");
-    const response = await axios.get("http://localhost:5000/auth/logout", {
+    const response = await axios.get(`${process.env.ServerURL}/auth/logout`, {
       withCredentials: true,
     });
     if (response) {
