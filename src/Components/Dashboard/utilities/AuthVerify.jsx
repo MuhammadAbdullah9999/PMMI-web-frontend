@@ -7,7 +7,7 @@ const AuthVerify = ({ onAuthVerify }) => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         console.log(response);
         if (response.data.user) {

@@ -40,7 +40,7 @@ function Availability() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/auth/verifyAuth`, {
+      .get(`https://pmi-web-backend.onrender.com/auth/verifyAuth`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -59,7 +59,7 @@ function Availability() {
 
   const fetchAvailabilityData = () => {
     axios
-      .get(`${process.env.ServerURL}/instructor/dashboard/getAvailability`, {
+      .get(`https://pmi-web-backend.onrender.com/instructor/dashboard/getAvailability`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -114,7 +114,7 @@ function Availability() {
     console.log(newAvailability);
     axios
       .post(
-        `${process.env.ServerURL}/instructor/dashboard/setAvailability`,
+        `https://pmi-web-backend.onrender.com/instructor/dashboard/setAvailability`,
         newAvailability,
         { withCredentials: true }
       )
@@ -151,7 +151,7 @@ function Availability() {
 
     axios
       .delete(
-        `${process.env.ServerURL}/instructor/dashboard/deleteAvailability/${slotId}`,
+        `https://pmi-web-backend.onrender.com/instructor/dashboard/deleteAvailability/${slotId}`,
         { withCredentials: true }
       )
       .then((response) => {

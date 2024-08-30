@@ -17,7 +17,7 @@ const params=useParams();
 const courseId=params.courseId
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         if(response.data.user.userType==='student'){
           setIsAuthenticated(true);
@@ -32,7 +32,7 @@ const courseId=params.courseId
       });
   }, []);
   const getCourseData = async () => {
-    const response = await axios.get(`${process.env.ServerURL}/student/dashboard/course/courseDetail`, {
+    const response = await axios.get(`https://pmi-web-backend.onrender.com/student/dashboard/course/courseDetail`, {
       params: {
       courseId:courseId
       },
@@ -45,7 +45,7 @@ const courseId=params.courseId
   useEffect(() => {
     const fetchAvailabilityData = async() => {
       axios
-        .get(`${process.env.ServerURL}/student/dashboard/getInstructorAvailability`, { withCredentials: true })
+        .get(`https://pmi-web-backend.onrender.com/student/dashboard/getInstructorAvailability`, { withCredentials: true })
         .then((response) => {
           setAvailabilityData(response.data.availability || []);
           
@@ -116,7 +116,7 @@ const courseId=params.courseId
   
       axios
         .post(
-          `${process.env.ServerURL}/student/dashboard/bookSlot`,
+          `https://pmi-web-backend.onrender.com/student/dashboard/bookSlot`,
           {
             day: selectedDay,
             time: selectedTime,

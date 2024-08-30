@@ -11,7 +11,7 @@ const Courses = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         console.log(response);
         if (response.data.user.userType === "student") {
@@ -28,7 +28,7 @@ const Courses = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/student/dashboard/courses/`, {
+      .get(`https://pmi-web-backend.onrender.com/student/dashboard/courses/`, {
         withCredentials: true,
       })
       .then((response) => {

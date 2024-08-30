@@ -14,7 +14,7 @@ const StudentDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         console.log(response);
         if (response.data.user.userType === "instructor") {
@@ -33,7 +33,7 @@ const StudentDetail = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`${process.env.ServerURL}/instructor/dashboard/student/${id}`, { withCredentials: true })
+        .get(`https://pmi-web-backend.onrender.com/instructor/dashboard/student/${id}`, { withCredentials: true })
         .then((response) => {
           console.log(response.data)
           setStudent(response.data); // Updated to reflect the correct data structure

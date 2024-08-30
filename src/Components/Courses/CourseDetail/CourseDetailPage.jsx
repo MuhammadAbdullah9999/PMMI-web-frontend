@@ -17,7 +17,7 @@ const CourseDetailPage = () => {
     const fetchCourse = async () => {
       try {
         const response = await axios.get(
-          `${process.env.ServerURL}/courses/getCourseDetails`, // Update with the correct endpoint
+          `https://pmi-web-backend.onrender.com/courses/getCourseDetails`, // Update with the correct endpoint
           {
             params: { type, courseName },
           }

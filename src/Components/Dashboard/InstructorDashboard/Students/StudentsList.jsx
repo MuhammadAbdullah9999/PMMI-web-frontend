@@ -10,7 +10,7 @@ const StudentsList = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         console.log(response);
         if (response.data.user.userType === "instructor") {
@@ -27,7 +27,7 @@ const StudentsList = () => {
 
   useEffect(() => {
     axios
-      .get(`{process.env.ServerURL}/instructor/dashboard/students/`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/instructor/dashboard/students/`, { withCredentials: true })
       .then((response) => {
         console.log(response);
         setStudents(Array.isArray(response.data.students

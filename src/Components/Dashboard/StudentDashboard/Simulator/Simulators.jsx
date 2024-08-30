@@ -9,7 +9,7 @@ const Simulators = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/student/dashboard/simulators/`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/student/dashboard/simulators/`, { withCredentials: true })
       .then((response) => {
         console.log(response);
         setSimulators(Array.isArray(response.data.simulators)

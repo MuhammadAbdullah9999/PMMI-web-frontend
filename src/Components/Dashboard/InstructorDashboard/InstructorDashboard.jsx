@@ -10,7 +10,7 @@ function InstructorDashboard() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         if (response.data.user.userType === "instructor") {
           setIsAuthenticated(true);
@@ -27,7 +27,7 @@ function InstructorDashboard() {
 
   const fetchDashboardData = () => {
     axios
-      .get(`${process.env.ServerURL}/instructor/dashboard`, {
+      .get(`https://pmi-web-backend.onrender.com/instructor/dashboard`, {
         withCredentials: true,
       })
       .then((response) => {

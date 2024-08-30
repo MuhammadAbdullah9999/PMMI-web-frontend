@@ -19,7 +19,7 @@ function Sessions() {
   const fetchMeetingsData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.ServerURL}/instructor/dashboard/getMeetingDetails`,
+        `https://pmi-web-backend.onrender.com/instructor/dashboard/getMeetingDetails`,
         { withCredentials: true }
       );
       console.log(response.data);
@@ -61,7 +61,7 @@ function Sessions() {
 
       try {
         const response = await axios.post(
-          `${process.env.ServerURL}/instructor/dashboard/addMeetingLink`,
+          `https://pmi-web-backend.onrender.com/instructor/dashboard/addMeetingLink`,
           {
             slotId: editLinkId,
             newLink: inputLink,
@@ -103,7 +103,7 @@ function Sessions() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         if (response.data.user.userType === "instructor") {
           setIsAuthenticated(true);

@@ -20,7 +20,7 @@ const SimulatorModule = () => {
     if (simulatorTitle && moduleTitle) {
       axios
         .get(
-          `${process.env.ServerURL}/student/dashboard/simulators/${simulatorTitle}/${moduleTitle}`,
+          `https://pmi-web-backend.onrender.com/student/dashboard/simulators/${simulatorTitle}/${moduleTitle}`,
           { withCredentials: true }
         )
         .then((response) => {
@@ -93,7 +93,7 @@ const SimulatorModule = () => {
         .correctOption;
     axios
       .post(
-        `${process.env.ServerURL}/student/dashboard/simulator/updateQuestion`,
+        `https://pmi-web-backend.onrender.com/student/dashboard/simulator/updateQuestion`,
         {
           simulatorTitle,
           moduleTitle,

@@ -9,7 +9,7 @@ const PaymentsAndBilling = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.ServerURL}/auth/verifyAuth`, { withCredentials: true })
+      .get(`https://pmi-web-backend.onrender.com/auth/verifyAuth`, { withCredentials: true })
       .then((response) => {
         if (response.data.user.userType === "student") {
           setIsAuthenticated(true);
@@ -26,7 +26,7 @@ const PaymentsAndBilling = () => {
   useEffect(() => {
     if (isAuthenticated) { // Fetch payments only if authenticated
       axios
-        .get(`${process.env.ServerURL}/student/dashboard/payments/`, {
+        .get(`https://pmi-web-backend.onrender.com/student/dashboard/payments/`, {
           withCredentials: true,
         })
         .then((response) => {

@@ -26,7 +26,7 @@ function InstructorSidebar({ isOpen, onClose }) {
 
   const handleLogout = async () => {
     console.log("logout");
-    const response = await axios.get(`${process.env.ServerURL}/auth/logout`, {
+    const response = await axios.get(`https://pmi-web-backend.onrender.com/auth/logout`, {
       withCredentials: true,
     });
     if (response) {

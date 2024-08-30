@@ -56,7 +56,7 @@ const Register = () => {
     }
     setLoading(true);
     try {
-      const response = await axios.post(`${process.env.ServerURL}/auth/signUp`, formData, {
+      const response = await axios.post(`https://pmi-web-backend.onrender.com/auth/signUp`, formData, {
         withCredentials: true,
       });
       if (response.status === 200) {

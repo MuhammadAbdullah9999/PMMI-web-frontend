@@ -11,7 +11,7 @@ const SimulatorModuleList = () => {
   useEffect(() => {
     if (simulatorTitle) {
       axios
-        .get(`${process.env.ServerURL}/student/dashboard/simulators/${simulatorTitle}`, { withCredentials: true })
+        .get(`https://pmi-web-backend.onrender.com/student/dashboard/simulators/${simulatorTitle}`, { withCredentials: true })
         .then((response) => {
           console.log(response);
           setModules(Array.isArray(response.data.modules) ? response.data.modules : []);
